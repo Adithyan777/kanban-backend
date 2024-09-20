@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import cors from 'cors';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config'
@@ -7,14 +8,15 @@ import { User } from '../models/User.js';
 
 const app = express();
 
-const port = 3000;
+const port = 8000;
 const databaseURI = process.env.DATABASE_URI;
 const jwt_secret = process.env.JWT_SECRET;
 
 // find NODE_ENV in process.env and set it to 'development' if it doesn't exist
-// find 
+// find frontend url to allow cors
 
 // configure CORS
+app.use(cors()); 
 
 // add all the global middlewares here
 app.use(express.json());
@@ -55,9 +57,9 @@ app.post('/register', async (req, res) => {
       }
   
       const user = await User.create({ username, email, password });
- //   const token = jwt.sign({ userId: user._id }, jwt_secret, { expiresIn: '1d' });
+      const token = jwt.sign({ userId: user._id }, jwt_secret, { expiresIn: '1d' });
   
-      res.status(201).json({ user: { id: user._id, username: user.username, email: user.email } });
+      res.status(201).json({ user: { id: user._id, username: user.username, email: user.email }, token });
     } catch (error) {
       res.status(500).json({ message: 'Error creating user', error: error.message });
     }
