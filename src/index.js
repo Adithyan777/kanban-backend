@@ -57,9 +57,9 @@ app.post('/register', async (req, res) => {
       }
   
       const user = await User.create({ username, email, password });
-      const token = jwt.sign({ userId: user._id }, jwt_secret, { expiresIn: '1d' });
+      // const token = jwt.sign({ userId: user._id }, jwt_secret, { expiresIn: '1d' });
   
-      res.status(201).json({ user: { id: user._id, username: user.username, email: user.email }, token });
+      res.status(201).json({ user: { id: user._id, username: user.username, email: user.email } });
     } catch (error) {
       res.status(500).json({ message: 'Error creating user', error: error.message });
     }
@@ -79,7 +79,12 @@ app.post('/login', async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: 'Error logging in', error: error.message });
     }
-  });
+});
+
+// add a route to authentiacate user from token and return if authenticated or not
+app.get('/auth', authenticateUser, (req, res) => {
+    res.json({ message: 'Authenticated', userId: req.user.id });
+});
 
 // Protected route example
 app.get('/api/protected', authenticateUser, (req, res) => {
