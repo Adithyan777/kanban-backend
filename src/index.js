@@ -149,6 +149,24 @@ app.put('/todos/:id', authenticateUser, async (req, res) => {
   }
 });
 
+// Patch task status
+app.patch('/todos/:id', authenticateUser, async (req, res) => {
+  try {
+    const { status } = req.body;
+    const task = await Task.findOneAndUpdate(
+      { _id: req.params.id, user: req.user.id },
+      { status },
+      { new: true, runValidators: true }
+    );
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+    res.json(task);
+  } catch (error){
+    res.status(400).json({ message: 'Error updating task', error: error.message });
+  }
+});
+
 // Delete a task
 app.delete('/todos/:id', authenticateUser, async (req, res) => {
   try {
