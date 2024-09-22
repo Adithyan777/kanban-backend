@@ -3,9 +3,9 @@ import cors from 'cors';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config'
-import { authenticateUser } from '../middlewares/auth.js';
-import { User } from '../models/User.js';
-import { Task } from '../models/Task.js';
+import { authenticateUser } from './middlewares/auth.js';
+import { User } from './models/User.js';
+import { Task } from './models/Task.js';
 
 const app = express();
 
@@ -179,9 +179,3 @@ app.delete('/todos/:id', authenticateUser, async (req, res) => {
     res.status(500).json({ message: 'Error deleting task', error: error.message });
   }
 });
-
-
-// Protected route example
-app.get('/api/protected', authenticateUser, (req, res) => {
-    res.json({ message: 'This is a protected route', userId: req.user.id });
-  });
