@@ -13,24 +13,20 @@ const port = 8000;
 const databaseURI = process.env.DATABASE_URI;
 const jwt_secret = process.env.JWT_SECRET;
 
-// find NODE_ENV in process.env and set it to 'development' if it doesn't exist
-// find frontend url to allow cors
 const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 // CORS configuration
 const corsOptions = {
   origin: frontendURL,
   optionsSuccessStatus: 204,
-  credentials: true, // This allows the server to accept credentials
+  credentials: true,
 };
 
-// Enable CORS with the specified options
 app.use(cors(corsOptions));
 
-// add all the global middlewares here
 app.use(express.json());
 
-// connect to MongoDB
+// Connect to MongoDB
 (async () => {
     try {
         await mongoose.connect(databaseURI);
@@ -60,7 +56,6 @@ app.post('/register', async (req, res) => {
       }
   
       const user = await User.create({ username, email, password });
-      // const token = jwt.sign({ userId: user._id }, jwt_secret, { expiresIn: '1d' });
   
       res.status(201).json({ user: { id: user._id, username: user.username, email: user.email } });
     } catch (error) {
