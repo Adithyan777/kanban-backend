@@ -15,9 +15,17 @@ const jwt_secret = process.env.JWT_SECRET;
 
 // find NODE_ENV in process.env and set it to 'development' if it doesn't exist
 // find frontend url to allow cors
+frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
-// configure CORS
-app.use(cors()); 
+// CORS configuration
+const corsOptions = {
+  origin: frontendURL,
+  optionsSuccessStatus: 204,
+  credentials: true, // This allows the server to accept credentials
+};
+
+// Enable CORS with the specified options
+app.use(cors(corsOptions));
 
 // add all the global middlewares here
 app.use(express.json());
@@ -35,12 +43,6 @@ app.use(express.json());
         console.error('Error connecting to MongoDB:', error);
     }
 })();
-
-// All the db schemas and models
-
-// Route specific middlewares
-
-// All the routes
 
 // Example route
 app.get('/', (req, res) => {
