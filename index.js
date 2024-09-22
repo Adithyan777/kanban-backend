@@ -15,7 +15,7 @@ const jwt_secret = process.env.JWT_SECRET;
 
 // find NODE_ENV in process.env and set it to 'development' if it doesn't exist
 // find frontend url to allow cors
-frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
+const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 // CORS configuration
 const corsOptions = {
